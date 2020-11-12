@@ -20,13 +20,6 @@ class Data:
         self.symbol = symbol
         self.timeseries = TimeSeries(key=self.API_KEY, output_format="pandas")
         self.fetch()
-        self.get_x()
-        self.get_mean()
-        self.get_low()
-        self.get_high()
-        self.get_sma()
-        self.get_ema()
-        self.description = self.interpret_sma()
 
     def fetch(self):
         """Fetch data from TimeSeries object
@@ -61,15 +54,10 @@ class Data:
         x = list(range(len(self.x)))
         slope, intercept, _, _, _ = stats.linregress(
             x, self.data["2. high"])
+        sd = self.data["2. high"].std()
         self.data["8. high_trend"] = x
         self.data["8. high_trend"] = self.data["8. high_trend"] * \
-            slope + intercept
-        data = self.data.loc[self.data["2. high"] > self.data["8. high_trend"]]
-        slope, intercept, _, _, _ = stats.linregress(
-            list(range(len(data))), data["2. high"])
-        self.data["8. high_trend"] = x
-        self.data["8. high_trend"] = self.data["8. high_trend"] * \
-            slope + intercept
+            slope + intercept + sd
 
     def get_low(self):
         """Calculate low trend regression
@@ -77,15 +65,10 @@ class Data:
         x = list(range(len(self.x)))
         slope, intercept, _, _, _ = stats.linregress(
             x, self.data["3. low"])
+        sd = self.data["3. low"].std()
         self.data["7. low_trend"] = x
         self.data["7. low_trend"] = self.data["7. low_trend"] * \
-            slope + intercept
-        data = self.data.loc[self.data["3. low"] < self.data["7. low_trend"]]
-        slope, intercept, _, _, _ = stats.linregress(
-            list(range(len(data))), data["3. low"])
-        self.data["7. low_trend"] = x
-        self.data["7. low_trend"] = self.data["7. low_trend"] * \
-            slope + intercept
+            slope + intercept - sd
 
     def get_mean(self):
         """Calculate mean regression

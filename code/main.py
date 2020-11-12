@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from data import Data
 from graph import Graph
 
@@ -18,5 +20,13 @@ class Handler:
         """
         for symbol in symbols:
             stock = Data(key=key, symbol=symbol)
+            stock.get_x()
+            stock.get_mean()
+            stock.get_low()
+            stock.get_high()
+            stock.get_sma()
+            stock.get_ema()
+            stock.description = stock.interpret_sma()
+            # Create plots
             viz = Graph(stock.data, stock.x, symbol, stock.description)
             viz.create()

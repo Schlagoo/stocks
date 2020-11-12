@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import pandas as pd
 from data import Data
 from matplotlib import pyplot as plt
@@ -72,5 +74,5 @@ class Graph:
         ax[0].tick_params(axis='y', colors='#505050')
         plt.subplots_adjust(wspace=0, hspace=0)
         plt.show()
-        fig.savefig("./plots/{}_{}.png".format(
+        fig.savefig("../imgs/{}_{}.png".format(
             date.today().strftime("%Y%m%d"), self.symbol), dpi=300)
