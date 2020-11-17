@@ -26,7 +26,8 @@ class Handler:
             stock.get_high()
             stock.get_sma()
             stock.get_ema()
-            stock.description = stock.interpret_sma()
+            levels = stock.get_finonacci_retracement()
+            # stock.description = stock.interpret_sma(levels)
             # Create plots
-            viz = Graph(stock.data, stock.x, symbol)
+            viz = Graph(stock.data, stock.x, symbol, levels)
             viz.create()

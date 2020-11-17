@@ -69,3 +69,9 @@ $$
 
 The factor k in conjunction with the standard deviation controls the width of the gap between upper and lower band. Assuming that the rates of the next time step (t+1) are random and normally distributed, the rate is found with a probability dependent on k within the band gap between upper and lower band. For example, with a factor of 2, this probability is 95.4 %.
 
+### Fibonacci Retracement
+
+### Price crossover
+
+### Golden/Death cross
+

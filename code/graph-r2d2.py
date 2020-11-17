@@ -29,13 +29,13 @@ class Graph:
         if self.levels:
             # Plot fibonacci replacements
             ax[0].axhspan(self.levels[0], self.levels[1],
-                          alpha=0.1, color="#40E6BF")
+                          alpha=0.1, color="lightsalmon")
             ax[0].axhspan(self.levels[1], self.levels[2],
-                          alpha=0.1, color="#DEEA5E")
+                          alpha=0.1, color="palegoldenrod")
             ax[0].axhspan(self.levels[2], self.levels[3],
-                          alpha=0.1, color="#E67143")
+                          alpha=0.1, color="palegreen")
             ax[0].axhspan(self.levels[3], self.levels[4],
-                          alpha=0.1, color="#E6264D")
+                          alpha=0.1, color="powderblue")
         if "6. mean" in self.data:
             ax[0].plot(self.x, self.data["6. mean"],
                        label="Mean", color="#E6E6E6")

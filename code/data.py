@@ -138,3 +138,17 @@ class Data:
             cross = "golden" if trend[-1] == 0 else "death"
 
         return cross
+
+    def get_finonacci_retracement(self):
+        """Generate fibonacci retracements based on ratios
+        """
+        ratios = [0, 0.236, 0.382, 0.618, 1]
+        min_value = self.data["4. close"].min()
+        max_value = self.data["4. close"].max()
+        difference = max_value - min_value
+        levels = []
+        # Generate levels based on difference multiplied by fibonacci ratios
+        for ratio in ratios:
+            levels.append(round(max_value - (difference * ratio), 2))
+
+        return levels
