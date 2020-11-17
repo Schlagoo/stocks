@@ -10,9 +10,9 @@
 
 ### To do
 
-* [ ] Improve low and High trend (calculate regression based on local maxima and minima)
-
+* [X] Improve low and High trend (calculate regression based on local maxima and minima)
+* [X] Bollinger Bands
+* [ ] Documentation of different techniques (trend, SMA, EMA, bollinger band)
+* [ ] Golden Cross
 * [ ] Support and Resistance
-
-* [ ] Bollinger Bands
 * [ ] Fibonacci Retracements

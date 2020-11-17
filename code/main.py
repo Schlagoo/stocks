@@ -28,5 +28,5 @@ class Handler:
             stock.get_ema()
             stock.description = stock.interpret_sma()
             # Create plots
-            viz = Graph(stock.data, stock.x, symbol, stock.description)
+            viz = Graph(stock.data, stock.x, symbol)
             viz.create()

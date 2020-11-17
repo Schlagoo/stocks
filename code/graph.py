@@ -9,7 +9,7 @@ from datetime import date
 
 class Graph:
 
-    def __init__(self, data, x, symbol, description):
+    def __init__(self, data, x, symbol):
         """Initialize variables and plot size
         """
         rcParams["figure.figsize"] = 14, 10
@@ -18,7 +18,6 @@ class Graph:
         self.red = "#E27E7E"
         self.green = "#6ABDAB"
         self.symbol = symbol
-        self.description = description
 
     def create(self):
         """Create boxplot of existing data columns
@@ -35,12 +34,18 @@ class Graph:
         if "8. high_trend" in self.data:
             ax[0].plot(self.x, self.data["8. high_trend"],
                        label="High", color="#ACC8C2")
-        if "9. sma" in self.data:
-            ax[0].plot(self.x, self.data["9. sma"],
+        if "9. sma15" in self.data:
+            ax[0].plot(self.x, self.data["9. sma15"],
                        label="SMA 15", color="#F7AE7E")
-        if "10. ema" in self.data:
-            ax[0].plot(self.x, self.data["10. ema"],
+        if "10. ema100" in self.data:
+            ax[0].plot(self.x, self.data["10. ema100"],
                        label="EMA 100", color="#B9B1F9")
+        if "11. bollinger up" in self.data and "12. bollinger low" in self.data:
+            ax[0].plot(self.x, self.data["11. bollinger up"],
+                       label="Bollinger band", color="#D0D0D0")
+            ax[0].plot(self.x, self.data["12. bollinger low"], color="#D0D0D0")
+            ax[0].fill_between(self.x, self.data["11. bollinger up"],
+                               self.data["12. bollinger low"], color="#D0D0D0", alpha=0.25)
         if set(["1. open", "2. high", "3. low", "4. close"]).issubset(self.data):
             boxplot = ax[0].boxplot(self.data[["1. open", "2. high", "3. low", "4. close"]],
                                     labels=self.x, positions=range(len(self.data)), patch_artist=True)
@@ -51,11 +56,11 @@ class Graph:
                     plt.setp(boxplot["boxes"][box], color=self.green)
         # Configure x axis labels
         for index, label in enumerate(ax[1].xaxis.get_ticklabels()):
-            if index % 5 != 0:
+            if index % 4 != 0:
                 label.set_visible(False)
-        plt.figtext(0.125, .02, self.description)
+        colors = self.color_bars()
+        ax[1].bar(self.x, self.data["5. volume"], color=colors)
         # Description
-        ax[1].bar(self.x, self.data["5. volume"], color="#E6E6E6")
         ax[0].set_title("Stock: {}".format(self.symbol))
         ax[0].legend()
         ax[0].yaxis.set_label_position("right")
@@ -76,3 +81,13 @@ class Graph:
         plt.show()
         fig.savefig("../imgs/{}_{}.png".format(
             date.today().strftime("%Y%m%d"), self.symbol), dpi=300)
+
+    def color_bars(self):
+        """Color volume bars based on if higher than mean
+        """
+        colors = []
+        volume_mean = self.data["5. volume"].mean()
+        for entry in self.data["5. volume"].values:
+            colors.append("#D0D0D0" if entry > volume_mean else "#E6E6E6")
+
+        return colors

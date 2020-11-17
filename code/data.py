@@ -54,10 +54,10 @@ class Data:
         x = list(range(len(self.x)))
         slope, intercept, _, _, _ = stats.linregress(
             x, self.data["2. high"])
-        sd = self.data["2. high"].std()
+        std = self.data["2. high"].std()
         self.data["8. high_trend"] = x
         self.data["8. high_trend"] = self.data["8. high_trend"] * \
-            slope + intercept + sd
+            slope + intercept + std
 
     def get_low(self):
         """Calculate low trend regression
@@ -65,10 +65,10 @@ class Data:
         x = list(range(len(self.x)))
         slope, intercept, _, _, _ = stats.linregress(
             x, self.data["3. low"])
-        sd = self.data["3. low"].std()
+        std = self.data["3. low"].std()
         self.data["7. low_trend"] = x
         self.data["7. low_trend"] = self.data["7. low_trend"] * \
-            slope + intercept - sd
+            slope + intercept - std
 
     def get_mean(self):
         """Calculate mean regression
@@ -82,26 +82,59 @@ class Data:
     def get_sma(self):
         """Calculate simple moving average by 15 days offset
         """
-        self.data["9. sma"] = self.data["4. close"].rolling(window=15).mean()
-        self.sma50 = round(self.data["4. close"].tail(50).rolling(
-            window=50).mean().iloc[-1], 3)
-        self.sma100 = round(self.data["4. close"].tail(100).rolling(
-            window=100).mean().iloc[-1], 3)
-
-    def interpret_sma(self):
-        """Interpret SMA to indicate buy, hold, sell
-        """
-        if (self.sma50 > self.data["4. close"].iloc[-1] and self.sma50 < self.data["4. close"].iloc[-2]):
-            action = "BUY"
-        elif (self.sma50 < self.data["4. close"].iloc[-1] and self.sma50 > self.data["4. close"].iloc[-2]):
-            action = "SELL"
-        else:
-            action = "HOLD"
-
-        return "Stock {}: {}".format(self.symbol, action)
+        self.data["9. sma15"] = self.data["4. close"].rolling(window=15).mean()
 
     def get_ema(self):
         """Calculate expontential moving average by 100 days offset
         """
-        self.data["10. ema"] = self.data["4. close"].ewm(
+        self.data["10. ema100"] = self.data["4. close"].ewm(
             span=100, adjust=False).mean()
+
+    def get_bollinger_band(self):
+        """Calculate bollinger band based on SMA 20 and k * std.
+        If price is normally distributed, probability to be in between band is 95,4 %.
+        """
+        k = 2
+        self.sma20 = round(
+            self.data["4. close"].rolling(window=20).mean())
+        self.data["11. bollinger up"] = self.sma20 + \
+            (k * self.data["4. close"].std())
+        self.data["12. bollinger low"] = self.sma20 - \
+            (k * self.data["4. close"].std())
+
+    def check_for_price_crossover(self, window=5) -> str:
+        """Compare SMA 50 to stock close values to look for price crossovers
+        """
+        index, trend, price = 0, [], "no"
+        sma50 = self.data["4. close"].rolling(window=50).mean().tail(5)
+        for _, row in self.data.iloc[-window:].iterrows():
+            # SMA 50 above close value
+            if (sma50[-window+index]) >= row["4. close"]:
+                trend.append(1)
+            # SMA 50 below close value
+            else:
+                trend.append(0)
+            index += 1
+        # Check for price crossover
+        if (sum(trend) % len(trend) != 0):
+            price = "bullish" if trend[-1] == 1 else "bearish"
+
+        return price
+
+    def check_for_cross(self, window=5) -> str:
+        """Weekly check for golden- or death cross. Default last 5 workdays
+        """
+        trend = []
+        cross = "no"
+        for _, row in self.data.iloc[-window:].iterrows():
+            # short-therm MA above long-therm MA
+            if (row["9. sma15"] >= row["10. ema100"]):
+                trend.append(0)
+            # short-therm MA below long-therm MA
+            else:
+                trend.append(1)
+        # Check for cross
+        if (sum(trend) % len(trend) != 0):
+            cross = "golden" if trend[-1] == 0 else "death"
+
+        return cross
