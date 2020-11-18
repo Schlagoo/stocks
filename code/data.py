@@ -139,7 +139,7 @@ class Data:
 
         return cross
 
-    def get_finonacci_retracement(self):
+    def get_fibonacci_retracement(self):
         """Generate fibonacci retracements based on ratios
         """
         ratios = [0, 0.236, 0.382, 0.618, 1]

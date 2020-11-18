@@ -26,6 +26,6 @@ Repository containing technical functionality to process and visualize stock dat
 
 ### Indicators
 
-* [ ] [Overbought, oversold by MA](https://school.stockcharts.com/doku.php?id=technical_indicators:moving_averages)
-* [ ] [Golden cross, death cross, MA](https://www.investopedia.com/ask/answers/121114/what-difference-between-golden-cross-and-death-cross-pattern.asp)
+* [x] [Overbought, oversold by MA](https://school.stockcharts.com/doku.php?id=technical_indicators:moving_averages)
+* [x] [Golden cross, death cross, MA](https://www.investopedia.com/ask/answers/121114/what-difference-between-golden-cross-and-death-cross-pattern.asp)
 * [ ] 

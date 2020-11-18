@@ -3,7 +3,7 @@
 import pandas as pd
 from data import Data
 from matplotlib import pyplot as plt
-from pylab import rcParams
+from pylab import rcParams, text
 from datetime import date
 
 
@@ -30,12 +30,16 @@ class Graph:
             # Plot fibonacci replacements
             ax[0].axhspan(self.levels[0], self.levels[1],
                           alpha=0.1, color="#40E6BF")
+            ax[0].text(0.25, self.levels[0] - 0.75, "0.0 %", color="#40E6BF")
             ax[0].axhspan(self.levels[1], self.levels[2],
                           alpha=0.1, color="#DEEA5E")
+            ax[0].text(0.25, self.levels[1] - 0.75, "23.6 %", color="#DEEA5E")
             ax[0].axhspan(self.levels[2], self.levels[3],
                           alpha=0.1, color="#E67143")
+            ax[0].text(0.25, self.levels[2] - 0.75, "38.2 %", color="#E67143")
             ax[0].axhspan(self.levels[3], self.levels[4],
                           alpha=0.1, color="#E6264D")
+            ax[0].text(0.25, self.levels[3] - 0.75, "61.8 %", color="#E6264D")
         if "6. mean" in self.data:
             ax[0].plot(self.x, self.data["6. mean"],
                        label="Mean", color="#E6E6E6")
@@ -74,7 +78,7 @@ class Graph:
         ax[1].bar(self.x, self.data["5. volume"], color=colors)
         # Description
         ax[0].set_title("Stock: {}".format(self.symbol))
-        ax[0].legend()
+        # ax[0].legend(loc="lower left")
         ax[0].yaxis.set_label_position("right")
         ax[0].yaxis.tick_right()
         ax[1].yaxis.set_label_position("right")

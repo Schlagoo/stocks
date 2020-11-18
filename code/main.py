@@ -26,8 +26,10 @@ class Handler:
             stock.get_high()
             stock.get_sma()
             stock.get_ema()
-            levels = stock.get_finonacci_retracement()
-            # stock.description = stock.interpret_sma(levels)
+            levels = stock.get_fibonacci_retracement()
+            stock.get_bollinger_band()
+            stock.check_for_price_crossover()
+            stock.check_for_cross()
             # Create plots
             viz = Graph(stock.data, stock.x, symbol, levels)
             viz.create()
